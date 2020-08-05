@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.*;
 
+/**
+ * 灰度发布 Filter
+ */
 public class GrayFilter extends ZuulFilter {
     @Override
     public String filterType() {
@@ -32,13 +35,15 @@ public class GrayFilter extends ZuulFilter {
         HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
         String headerGrayMark = request.getHeader("header_gray_mark");
         String hostGrayMark = request.getParameter("host_gray_mark");
+        // 是否灰度生效
         boolean grayEnable = !StringUtils.isEmpty(headerGrayMark) && "enable".equals(headerGrayMark);
         grayEnable = grayEnable || !StringUtils.isEmpty(hostGrayMark) && "enable".equals(hostGrayMark);
 
         if (grayEnable) {
-            //
+            // 标识路由选择 eureka.instancemetadataMap.host-mark=gray 灰度服务集群
             RibbonFilterContextHolder.getCurrentContext().add("host-mark", "gray");
         } else {
+            // 标识路由选择 eureka.instancemetadataMap.host-mark=running 正式服务集群
             RibbonFilterContextHolder.getCurrentContext().add("host-mark", "running");
         }
         return null;

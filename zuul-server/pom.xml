@@ -20,6 +20,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
+        <!-- 支持 Zuul Server 灰度发布控制 -->
         <dependency>
             <groupId>io.jmnarloch</groupId>
             <artifactId>ribbon-discovery-filter-spring-cloud-starter</artifactId>
